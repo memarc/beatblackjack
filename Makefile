@@ -4,18 +4,16 @@
 ######## compiler options ########
 CC = gcc
 LANG_OPTIONS = 
-WARN_OPTIONS = -Wall -Wtraditional -Wpointer-arith \
-               -Wconversion -Wstrict-prototypes -Wmissing-prototypes \
+WARN_OPTIONS = -Wall -Wpointer-arith -Wconversion -Wstrict-prototypes -Wmissing-prototypes \
                -Wmissing-declarations -Wreturn-type \
                -Wnested-externs -Wwrite-strings -Wcast-qual
 INCDIR = -I. -I/usr/include
 CFLAGS = $(DEFINES) $(LANG_OPTIONS) $(WARN_OPTIONS) $(INCDIR)
-COPTS = -O2
+COPTS = -O2 -fPIC
 
-######## compile options for perlwrappers ########
-PERLWRAPPER=swig -perl5 -Isrc/ -dnone
-PERLINC=/usr/lib/perl5/5.00502/i586-linux/CORE
-PERLOPTS=$(COPTS) $(DEFINES) $(LANG_OPTIONS) -Dbool=char
+######## compile options for pythonwrappers ########
+PYTHONWRAPPER=swig -python  
+PYTHONINC=/usr/include/python2.4
 
 ######## link options ########
 LD = gcc
@@ -32,105 +30,73 @@ INSTALLEXE = install -m 755
 
 ######## rules ########
 
-default: bbjd simbj basicbbjd basicsimbj
+default: bbjd simbj basicbbjd basicsimbj pythonmodules
 
-perlmodules: cgi-bin/bbjd.pm cgi-bin/bbjd.so cgi-bin/simbj.pm cgi-bin/simbj.so cgi-bin/basicsimbj.pm cgi-bin/basicsimbj.so
+pythonmodules: bbjd.py _bbjd.so simbj.py _simbj.so
 
-all: default perlmodules
+all: default pythonmodules
 
-bbjd: src/probability.o src/interactive.o src/display.o
+bbjd: probability.o interactive.o display.o
 	@echo --- linking: $@ ---
 	$(LD) $(LDFLAGS) $^ $(LIBRARIES) -o $@
 
-basicbbjd: src/basic_probability.o src/interactive.o src/display.o
+basicbbjd: basic_probability.o interactive.o display.o
 	@echo --- linking: $@ ---
 	$(LD) $(LDFLAGS) $^ $(LIBRARIES) -o $@
 
-cgi-bin/bbjd.pm: cgi-bin/bbjd.so
+bbjd.py: _bbjd.so
 
-cgi-bin/bbjd.so: src/probability_wrap.o src/probability.o
+_bbjd.so: probability_wrap.o probability.o
 	@echo --- linking: $@ ---
 	$(SHARED_LD) $^ -o $@
 
-simbj: src/probability.o src/simulate.o src/simbj.o
+simbj: probability.o simulate.o simbj.o
 	@echo --- linking: $@ ---
 	$(LD) $(LDFLAGS) $^ $(LIBRARIES) -o $@
 
-basicsimbj: src/basic_probability.o src/simulate.o src/simbj.o
+simbj.py: _simbj.so
+
+_simbj.so: simbj_wrap.o simulate.o probability.o 
+	@echo --- linking: $@ ---
+	$(SHARED_LD) $^ -o $@
+
+basicsimbj: basic_probability.o simulate.o simbj.o
 	@echo --- linking: $@ ---
 	$(LD) $(LDFLAGS) $^ $(LIBRARIES) -o $@
 
-cgi-bin/simbj.so: src/simbj_wrap.o src/simulate.o src/probability.o 
+basicsimbj.so: basicsimbj_wrap.o simulate.o basic_probability.o 
 	@echo --- linking: $@ ---
 	$(SHARED_LD) $^ -o $@
 
-cgi-bin/basicsimbj.so: src/basicsimbj_wrap.o src/simulate.o src/basic_probability.o 
-	@echo --- linking: $@ ---
-	$(SHARED_LD) $^ -o $@
-
-src/%_wrap.o: src/%_wrap.c
+%_wrap.o: %_wrap.c
 	@echo --- compiling: $< ---
-	$(CC) -I$(PERLINC) $(PERLOPTS) -c $< -o $@
+	$(CC) -I$(PYTHONINC) $(COPTS) -c $< -o $@
 
-src/%o: src/%c
+%o: %c
 	@echo --- compiling: $< ---
 	$(CC) $(CFLAGS) $(COPTS) -c $< -o $@
 
-src/probability_wrap.c: src/probability.i src/probability.h
+probability_wrap.c: probability.i probability.h
 	@echo --- generating: $@ ---
-	$(PERLWRAPPER) $< 
-	mv bbjd.pm cgi-bin/
+	$(PYTHONWRAPPER) $< 
 
-src/simbj_wrap.c cgi-bin/simbj.pm: src/simbj.i src/simulate.h
+simbj_wrap.c simbj.pm: simbj.i simulate.h
 	@echo --- generating: $@ ---
-	$(PERLWRAPPER) $<
-	mv simbj.pm cgi-bin/
+	$(PYTHONWRAPPER) $<
 
-src/basicsimbj_wrap.c cgi-bin/basicsimbj.pm: src/basicsimbj.i src/simulate.h
+basicsimbj_wrap.c basicsimbj.pm: basicsimbj.i simulate.h
 	@echo --- generating: $@ ---
-	$(PERLWRAPPER) $<
-	mv basicsimbj.pm cgi-bin/
-
-install: all
-	@echo --- installing ---
-	$(INSTALLDIR) $(INSTALLBASE)
-	$(INSTALLFILE) Interactive $(INSTALLBASE)
-	$(INSTALLFILE) README $(INSTALLBASE)
-	$(INSTALLFILE) Simulation $(INSTALLBASE)
-	$(INSTALLFILE) Theory $(INSTALLBASE)
-	$(INSTALLDIR) $(INSTALLBASE)/bin
-	$(INSTALLEXE) bbjd $(INSTALLBASE)/bin
-	$(INSTALLEXE) basicbbjd $(INSTALLBASE)/bin
-	$(INSTALLEXE) simbj $(INSTALLBASE)/bin
-	$(INSTALLEXE) basicsimbj $(INSTALLBASE)/bin
-	$(INSTALLDIR) $(INSTALLBASE)/cgi-bin
-	$(INSTALLFILE) cgi-bin/basicsimbj.pm $(INSTALLBASE)/cgi-bin
-	$(INSTALLEXE) cgi-bin/basicsimbj.so $(INSTALLBASE)/cgi-bin
-	$(INSTALLFILE) cgi-bin/bbjd.pm $(INSTALLBASE)/cgi-bin
-	$(INSTALLEXE) cgi-bin/bbjd.so $(INSTALLBASE)/cgi-bin
-	$(INSTALLEXE) cgi-bin/bjtables.pl $(INSTALLBASE)/cgi-bin
-	$(INSTALLEXE) cgi-bin/playbj.pl $(INSTALLBASE)/cgi-bin
-	$(INSTALLFILE) cgi-bin/simbj.pm $(INSTALLBASE)/cgi-bin
-	$(INSTALLEXE) cgi-bin/simbj.so $(INSTALLBASE)/cgi-bin
-	$(INSTALLDIR) $(INSTALLBASE)/htdocs
-	$(INSTALLFILE) htdocs/*.gif $(INSTALLBASE)/htdocs
-	$(INSTALLFILE) htdocs/*.html $(INSTALLBASE)/htdocs
-	$(INSTALLFILE) htdocs/*.js $(INSTALLBASE)/htdocs
-	$(INSTALLDIR) $(INSTALLBASE)/htdocs/cards
-	$(INSTALLFILE) htdocs/cards/*.gif $(INSTALLBASE)/htdocs/cards
+	$(PYTHONWRAPPER) $<
 
 clean:
-	rm -f src/*.o src/*_wrap.c core
+	rm -f *.o *_wrap.c core
 
 distclean: clean
-	rm -f bbjd basicbbjd simbj basicsimbj cgi-bin/*.pm cgi-bin/*.so .simopts .depend .depend.bak
-
-tar.gz: distclean
-	cd ..; tar czf bbjd-src-1.0.3.tar.gz bbjd/
+	rm -f bbjd basicbbjd simbj basicsimbj .simopts .depend .depend.bak *.so
 
 depend:
 	@touch .depend
-	makedepend -- $(CFLAGS) -I$(PERLINC) -- src/*.c -f .depend
+	makedepend -- $(CFLAGS) -- *.c -f .depend
 
 -include .depend
 

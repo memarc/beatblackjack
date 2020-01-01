@@ -5,6 +5,7 @@
  */
 
 #include <stdio.h>
+#include <string.h>
 #include "simulate.h"
 #include "probability.h"
 
@@ -236,21 +237,11 @@ static void print_score(int sum)
         printf("%d ", sum);
 }
 
-
-/* shuffle cards in shoe */
-static void shuffle_cards(void)
-{
-    printf("\n==== shuffeling ====\n");
-    shuffle_cards_permutation(3);
-    show_distribution();
-}
-
-
 static void a_game(void)
 {
     int g, k, i;
 
-    determine_player_bet(increment_bet, minimum_bet, maximum_bet);
+    determine_player_bet(minimum_bet, maximum_bet, 0.05f);
     printf("\nexpect: %6.3f%%, player bets for: %d", 100.0f*expect_player_bet(0), get_player_bet());
     simulate_game(gamblers_before, gamblers_after);
 
@@ -301,21 +292,22 @@ static void a_game(void)
 
 int main(int argc, char** argv)
 {
-    load_options();
-    setup_options();
-    save_options();
-    setup_cards(num_decks);
-    set_shuffle_callback(shuffle_cards);
-    show_distribution();
-    while (get_player_capital()>0) {
-        shuffle_cards();
-        while (get_player_capital()>0 && taken_cards_distribution()<shuffle_condition) {
-            num_game++;
-            printf("\n---- game: %d capital: %d (min: %d, max: %d, expect: %6.0f) ----", num_game, get_player_capital(), get_min_capital(), get_max_capital(), get_expected_capital());
-            a_game();
-        }
-    }
-    printf("Bankrupted. Exiting from simbj\n");
-    exit(0);
+	load_options();
+	setup_options();
+	save_options();
+	setup_cards(num_decks);
+	show_distribution();
+	while (get_player_capital()>0) {
+		printf("\n==== shuffeling ====\n");
+		shuffle_cards();
+		show_distribution();
+		while (get_player_capital()>0 && taken_cards_distribution()<shuffle_condition) {
+			num_game++;
+			printf("\n---- game: %d capital: %d (min: %d, max: %d, expect: %6.0f) ----", num_game, get_player_capital(), get_min_capital(), get_max_capital(), get_expected_capital());
+			a_game();
+		}
+	}
+	printf("Bankrupted. Exiting from simbj\n");
+	return 0;
 }
 

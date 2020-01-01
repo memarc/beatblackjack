@@ -6,7 +6,9 @@
 
 %module simbj
 %{
+#include "probability.h"
 #include "simulate.h"
 %}
+%include probability.h
 %include simulate.h
 

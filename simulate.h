@@ -4,8 +4,6 @@
  * $Id: simulate.h,v 1.2 2000/01/10 23:13:13 jacob Exp $
  */
 
-typedef void(*shuffle_func_prototype)(void);
-
 /*
  * Initialize the shoe with nd number of decks.
  * The cards in the shoe are not shuffled
@@ -20,7 +18,8 @@ void setup_capital(int capital);
 
 
 /*
- * Returns the value accosiated with a certain card.
+ * Returns the value associated with a certain card.
+ * ACE is 1. Jack, Queen and King are valued 10.
  */
 int card2value(int card);
 
@@ -41,31 +40,23 @@ int show_card_in_shoe(int index);
 /*
  * Shuffle cards in shoe by simple permutation.
  * This is a very primitive way of shuffeling.
- * factor: the average number of permutations each card is exchanged.
  */
-void shuffle_cards_permutation(int factor);
+void shuffle_cards(void);
 
 /* 
- * Determine the stake to bet for the player.
- * increment_bet: is the number by which the total_expectation is multiplied to obtain the
- *     height of the bet. Only used if the total_expectation is above zero.
+ * Determine the stake to bet for the player. 
  * minimum_bet, maximum_bet: the table limits for placing the stake.
+ * The number determined here is minimum_bet for expectations below zero and 
+ * maximum_bet for expectations at max_at_exp. Between zero and max_at_exp
+ * the stake increases linearily. A good value for max_at_exp is 0.05.
+ * The determined stake is alway a multiple of minimum_bet.
  */
-void determine_player_bet(int increment_bet, int minimum_bet, int maximum_bet);
-
-/*
- * Set the callback function for shuffeling cards.
- * Here the client may override the default shuffeling function, used
- * to shuffle the cards in the shoe. If 'sf' is NULL the default
- * shuffeling function is used.
- */
-void set_shuffle_callback(shuffle_func_prototype sf);
+int determine_player_bet(int minimum_bet, int maximum_bet, float max_at_exp);
 
 /*
  * Simulate a game of having determined the stake.
  * gamblers_before, int gamblers_after: The number of gamblers sitting before and after the
  *     simulating player.
- * shuffle_function: The callback function to be called if the shoe is empty and must be reshuffled.
  */
 void simulate_game(int gamblers_before, int gamblers_after);
 
