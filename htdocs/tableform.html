@@ -1,0 +1,68 @@
+<!-- $Id: tableform.html,v 1.1 2000/01/10 23:11:49 jacob Exp $ -->
+Number of decks: <INPUT NAME="Decks" SIZE=2 MAXLENGTH=2 VALUE="6" onChange="init_shoe()">
+<TABLE border=0 cols=1 cellpadding=0 cellspacing=3>
+<TR align=center bgcolor=#E0E0A0>
+<TH width=88 height=33>Card:</th>
+<TH width=54><B>2</B></TH>
+<TH width=54><B>3</B></TH>
+<TH width=54><B>4</B></TH>
+<TH width=54><B>5</B></TH>
+<TH width=54><B>6</B></TH>
+<TH width=54><B>7</B></TH>
+<TH width=54><B>8</B></TH>
+<TH width=54><B>9</B></TH>
+<TH width=54><B>X</B></TH>
+<TH width=54><B>A</B></TH>
+<TH width=54><B>Total</B></TH>
+</TR>
+<TR align=center bgcolor=#C0C0C0>
+<TH bgcolor=#E0E0A0 height=33>Number:</TH>
+<TD><INPUT NAME="C2" SIZE=2 MAXLENGTH=2 TABINDEX=1 onChange="normalize()"></TD>
+<TD><INPUT NAME="C3" SIZE=2 MAXLENGTH=2 TABINDEX=2 onChange="normalize()"></TD>
+<TD><INPUT NAME="C4" SIZE=2 MAXLENGTH=2 TABINDEX=3 onChange="normalize()"></TD>
+<TD><INPUT NAME="C5" SIZE=2 MAXLENGTH=2 TABINDEX=4 onChange="normalize()"></TD>
+<TD><INPUT NAME="C6" SIZE=2 MAXLENGTH=2 TABINDEX=5 onChange="normalize()"></TD>
+<TD><INPUT NAME="C7" SIZE=2 MAXLENGTH=2 TABINDEX=6 onChange="normalize()"></TD>
+<TD><INPUT NAME="C8" SIZE=2 MAXLENGTH=2 TABINDEX=7 onChange="normalize()"></TD>
+<TD><INPUT NAME="C9" SIZE=2 MAXLENGTH=2 TABINDEX=8 onChange="normalize()"></TD>
+<TD><INPUT NAME="C10" SIZE=2 MAXLENGTH=2 TABINDEX=9 onChange="normalize()"></TD>
+<TD><INPUT NAME="C1" SIZE=2 MAXLENGTH=2 TABINDEX=0 onChange="normalize()"></TD>
+<TD><INPUT TYPE=text NAME="C0" SIZE=3 MAXLENGTH=3 readonly></TD>
+</TR>
+<TR align=center bgcolor=#E0E0E0>
+<TH bgcolor=#E0E0A0 height=33>Distribution:</TH>
+<TD><INPUT NAME="P2" SIZE=3 MAXLENGTH=3 readonly>%</TD>
+<TD><INPUT NAME="P3" SIZE=3 MAXLENGTH=3 readonly>%</TD>
+<TD><INPUT NAME="P4" SIZE=3 MAXLENGTH=3 readonly>%</TD>
+<TD><INPUT NAME="P5" SIZE=3 MAXLENGTH=3 readonly>%</TD>
+<TD><INPUT NAME="P6" SIZE=3 MAXLENGTH=3 readonly>%</TD>
+<TD><INPUT NAME="P7" SIZE=3 MAXLENGTH=3 readonly>%</TD>
+<TD><INPUT NAME="P8" SIZE=3 MAXLENGTH=3 readonly>%</TD>
+<TD><INPUT NAME="P9" SIZE=3 MAXLENGTH=3 readonly>%</TD>
+<TD><INPUT NAME="P10" SIZE=3 MAXLENGTH=3 readonly>%</TD>
+<TD><INPUT NAME="P1" SIZE=3 MAXLENGTH=3 readonly>%</TD>
+</TR>
+<TR align=center height=50 bgcolor=#C0C0C0>
+<TH bgcolor=#E0E0A0 height=33><INPUT TYPE=submit VALUE=" Compute "></TH>
+<TD><INPUT TYPE=button VALUE="<" onClick="dec_2_in_shoe()">
+<INPUT TYPE=button VALUE=">" onClick="inc_2_in_shoe()"></TD>
+<TD><INPUT TYPE=button VALUE="<" onClick="dec_3_in_shoe()">
+<INPUT TYPE=button VALUE=">" onClick="inc_3_in_shoe()"></TD>
+<TD><INPUT TYPE=button VALUE="<" onClick="dec_4_in_shoe()">
+<INPUT TYPE=button VALUE=">" onClick="inc_4_in_shoe()"></TD>
+<TD><INPUT TYPE=button VALUE="<" onClick="dec_5_in_shoe()">
+<INPUT TYPE=button VALUE=">" onClick="inc_5_in_shoe()"></TD>
+<TD><INPUT TYPE=button VALUE="<" onClick="dec_6_in_shoe()">
+<INPUT TYPE=button VALUE=">" onClick="inc_6_in_shoe()"></TD>
+<TD><INPUT TYPE=button VALUE="<" onClick="dec_7_in_shoe()">
+<INPUT TYPE=button VALUE=">" onClick="inc_7_in_shoe()"></TD>
+<TD><INPUT TYPE=button VALUE="<" onClick="dec_8_in_shoe()">
+<INPUT TYPE=button VALUE=">" onClick="inc_8_in_shoe()"></TD>
+<TD><INPUT TYPE=button VALUE="<" onClick="dec_9_in_shoe()">
+<INPUT TYPE=button VALUE=">" onClick="inc_9_in_shoe()"></TD>
+<TD><INPUT TYPE=button VALUE="<" onClick="dec_10_in_shoe()">
+<INPUT TYPE=button VALUE=">" onClick="inc_10_in_shoe()"></TD>
+<TD><INPUT TYPE=button VALUE="<" onClick="dec_A_in_shoe()">
+<INPUT TYPE=button VALUE=">" onClick="inc_A_in_shoe()"></TD>
+</TR>
+</TABLE>

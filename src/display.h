@@ -1,7 +1,7 @@
 /*
  * How to beat the Blackjack dealer
  * Copyright (C) 1992, 1997 Jacob Rief
- * $Id: display.h,v 1.1.1.1 1998/10/26 09:42:51 jacob Exp $
+ * $Id: display.h,v 1.1.1.1 1999/12/12 23:12:31 jacob Exp $
  */
 
 #ifndef __DISPLAY_H__

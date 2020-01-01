@@ -1,0 +1,30 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 TRANSITIONAL//EN">
+<!-- $Id: s_table.html,v 1.1 2000/01/11 22:48:35 jacob Exp $ -->
+<HTML>
+<HEAD>
+<TITLE>Beat the Blackjack dealer (Tables)</TITLE>
+<META NAME="description" CONTENT="This document describes how to beat the Blackjack dealer using a
+program to calculate instantaneously the optimum strategy.">
+<META NAME="keywords" CONTENT="Blackjack, Black Jack, gambling, beat the dealer, bbjd, program, simulation">
+</HEAD>
+
+<BODY BGCOLOR=#FFFFFF TEXT=#000000 VLINK=#400040 ALINK=#000080 onLoad="init_shoe()">
+
+<H1 align=center>Card distribution in the shoe</H1>
+<SCRIPT LANGUAGE="JavaScript" SRC="shoe.js" TYPE="text/javascript"></SCRIPT>
+<FORM NAME="Shoe" ACTION="/cgi-bin/bjtables.pl" METHOD=POST TARGET="lower">
+<!--#include file="tableform.html"-->
+<!--#include file="tabletext.html"-->
+</FORM>
+<TABLE COLS=3 CELLPADDING=0 CELLSPACING=0 WIDTH=100% BGCOLOR=#E0E0E0><TR>
+<TD WIDTH=30 ALIGN=CENTER><IMG SRC="icons/right.gif"></TD>
+<TD ALIGN=CENTER><A HREF="s_counting.html">Counting methods</A></TD>
+<TD WIDTH=30 ALIGN=CENTER><IMG SRC="icons/right.gif"></TD></TR>
+<TR><TD WIDTH=30 ALIGN=CENTER><IMG SRC="icons/left.gif"></TD>
+<TD ALIGN=CENTER><A HREF="s_theory.html">How the best strategy is computed</A></TD>
+<TD WIDTH=30 ALIGN=CENTER><IMG SRC="icons/left.gif"></TD>
+</TR></TABLE>
+<BR>Copyright &copy; 2000, <A HREF="mailto:bbjd@bigfoot.com">Jacob Rief</A><BR>
+
+</BODY>
+</HTML>

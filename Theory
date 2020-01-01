@@ -1,44 +1,44 @@
-bbjd - Beat the blackjack dealer
+BBJD - Beat the Blackjack Dealer
 Written by Jacob Rief in 1992.
 Adopted for public and published in 1998.
 
-How can You beat the Black Jack dealer and why do casinos still offer Black Jack if
+How can You beat the Blackjack dealer and why do casinos still offer Blackjack if
 this is so? To understand and to prove this, I have written this program. You may use
 it to experiment, to test Your own strategy or to build it into a pocket sized gamble-computer.
 
 In order to win on the long term, You have to count cards. And You have to recalculate
 the probabilities and expectations according to the cards remaining in the shoe.
 More than that, in casinos You are allowed to use calculators and even laptops playing
-roulette. But when You play Black Jack, You are not even allowed to write on paper or
+roulette. But when You play Blackjack, You are not even allowed to write on paper or
 to use an abacus. They know why!
 
 All probability and expectation tables shown here have been calculated for 6 decks of
 52 cards. You may use the program 'bbjd' supplied with this package to obtain the same
-tables. You may also use 'bbjd' to test with a different amount of packs or other distributions
+tables. You may also use 'bbjd' to test with a different amount of decks or other distributions
 of cards in the shoe.
 
 How does the strategy work? In order to understand this, You must know something about the
-rules of Black Jack.
-Black Jack is played with 4 to 6 decks of 52 cards each. The values of the cards correspond
+rules of Blackjack.
+Blackjack is played with 1 to 6 decks of 52 cards each. The values of the cards correspond
 to their numerical value from 2-10. All face cards (jack, queen, king) count 10 and
 the ace either 1 or 11, as the holders desires. The color of the cards does not have any
 effect.
 The goal of the game is to reach a score (= sum of the cards) as high as possible but
-not more than 21. A Black Jack (ace and a card whose value is 10) beats all other 
+not more than 21. A Blackjack (ace and a card whose value is 10) beats all other 
 combination of cards.
 If the final sum is higher than the sum of the dealer, the player gets a play-off of 1:1
 of his initial stake.
-If the players combination is Black Jack, the play-off is 3:2 of the initial stake.
+If the players combination is Blackjack, the play-off is 3:2 of the initial stake.
 If the sum of the dealer is lower, the player looses his bet. If the sum is equal,
 the nobody wins. If the player holds a score of 22 or more, he busted and thus he looses
 his bet immediately. If the dealer busts, the players wins independently of his
 final score.
-Black Jack can be played from one to seven players against one dealer. The dealer shuffles
+Blackjack can be played from one to seven players against one dealer. The dealer shuffles
 the cards. Now You and the other players must place their bets. Then each player and the
 dealer receives one card. The cards all lie face up. Thereafter the player receive a second
 card. The player now can continue to 'buy' further cards, one by one, until he believes that 
 he is near enough to 21. If the player believes to have reached a score high enough he must
-signalise the dealer to 'stay', which means not to call for any further cards.
+signalize the dealer to 'stay', which means not to call for any further cards.
 The player has some more possibility's other than 'buy' and 'stay'. If he reached a score
 of nine, ten or eleven with his first two cards, he can double his bet. However if he does so,
 he will be dealt only one more card.
@@ -46,14 +46,14 @@ If the first two cards are of same value, the player has the possibility to 'spl
 which means that each of the cards are used to start with a separate bet. For each split hand,
 an additional bet equal to the first is required.
 There is one exception: If the player splits two aces, he receives only one more card.
-In this case a score of 21 is not considered as Black Jack.
+In this case a score of 21 is not considered as Blackjack.
 Once the last player has decided to stay with his score, the dealer starts to draw a second
 card. If his result is reaching a score of 17 or more, he will deal himself no further cards.
 If the dealer has a score of 16 or less, he must draw until he has reached 17 or more. If
 the dealer exceeds 21, he busts. This is the basic knowledge You have: The dealer can not split
 nor double; he must play according to strict rules. And thats our advantage!
 
-The first thing to do, is to calculate the probabilities of the dealers last hand. To do this
+The first thing to do is to calculate the probabilities of the dealers last hand. To do this
 we assume that the shoe is a black box, whose job is to deliver the probability for drawing a
 card with a certain value. Lets say the we have 6 decks of 52 cards, so the probability
 of drawing an ace is 6*4/6*52 = 24/312 = 7.7%. The probability of drawing a second ace without
@@ -86,9 +86,9 @@ when the dealers first hand is 7-ACE.
 
 The table above is valid for the dealers last hand. Calculating the probabilities for the players
 last hand is not as simple, as the player has lots of decisions to make. The player must decide to
-buy or to stay with a present score between 12 and 16. Below 12 the player will always buy, because
-he can never bust. With a score of 17 and more the player will never buy, because the risk to bust
-is to high. With soft hands (ie. an ace and another card) the player will always buy, if the score
+buy or to stay with a present score between 12 and 16. Under a score of 12 the player will always buy,
+because he can't bust anyway. With a score above 17 the player will never buy, because the risk to bust
+is too high. With soft hands (ie. an ace and another card) the player will always buy, if the score
 is 6/16 or lower because he can't bust and such a score always looses against the dealers score.
 
 To know if the right decision is to buy or to stay in a situation where the present score is between
@@ -156,7 +156,7 @@ if he buys with a score of 12 than if he stays. So he should buy.
 If the dealers first hand is 3 than on the long term the player will win 15.7% more
 if he stays with a score of 15 than if he buys. So he should stay.
 
-The rules of Black Jack are a little bit more complicate than that. We must calculate the
+The rules of Blackjack are a little bit more complicate than that. We must calculate the
 expectations for doubling cards too. The table is represented here:
 
 --- Expectation for DOUBLE contra BUY under the condition of dealers first hand ---
@@ -238,8 +238,8 @@ score into two cards whose final score is uncertain. However a dealer first hand
 42.3%. This means that the player, after having seen the dealers bad first had, gets a
 second opportunity to increase his stake. Using this opportunity gives him a further advantage.
 
-Another decision the player can do, is to take out insurance against a Black Jack,
-if the dealers first hand is an ace. This is very rarely of interest and should normally
+Another decision the player can do, is to take out insurance against a Blackjack,
+if the dealers first hand is an Ace. This is very rarely of interest and should normally
 not be considered as the default strategy informs:
 
 --- Expectation for INSURANCE under the condition of dealers first hand is ACE ---
@@ -276,7 +276,7 @@ circumstances You should double on 9 against 3, 4, 5 or 6. But in a very few unl
 just get a card with a value of 2 after You doubled. Fortunately this does not happen very often,
 only about each 1000 games.
 
-The last table shows the total expectation playing Black Jack.
+The last table shows the total expectation playing Blackjack.
 
 --- Final expectation (when played with optimal strategy) ---
 dfh        2       3       4       5       6       7       8       9      10       A    TOTAL
@@ -289,10 +289,10 @@ the dealers first hand is, this table is not of to great interest.
 Except for the last number, the total expectation, this is of very high interest.
 This number is the magic key which gives a realistic chance to beat the casino.
 On the long term the player looses "only" 0.85% of his initial bet, if the cards would
-be shuffled after each game or if the dealer plays with an infinite number of packs.
-On real Black Jack tables, the dealer plays with one to six packs, shuffled
+be shuffled after each game or if the dealer plays with an infinite number of decks.
+On real Blackjack tables, the dealer plays with one to six decks, shuffled
 after half to three quarts of the total amount of cards. At the beginning of the first game,
-after the shoe is filled up with 6 packs of freshly shuffled cards, the total expectation
+after the shoe is filled up with 6 decks of freshly shuffled cards, the total expectation
 is -0.849%. As long as the dealer does not reshuffle, the total expectation moves up until
 about 5% and down until about -6%. If high cards are gone (9, 10, ace), the total expectation
 decreases, but if the low cards (8, 7, 6, 5, 4, 3, 2) are gone the total expectation increases.
@@ -315,7 +315,7 @@ all your money is much higher. Furthermore the casino may identify You as a "car
 
 Two programs are supplied, one is to calculate the strategy, probabilities and
 expectations according to the cards which are gone. It can be used interactively,
-to experiment and practise Your strategy. The user can modify the composition of
+to experiment and practice Your strategy. The user can modify the composition of
 cards in the shoe and then recalculate all the probabilities and expectations.
 The second program requires no user input by the user. It simulates games between the
 dealer and the player.

@@ -1,7 +1,7 @@
 /*
  * How to beat the Blackjack dealer
  * Copyright (C) 1992, 1998 Jacob Rief
- * $Id: interactive.c,v 1.3 1998/10/26 11:36:04 jacob Exp $
+ * $Id: interactive.c,v 1.2 2000/01/10 23:13:13 jacob Exp $
  */
 
 #include <stdlib.h>
@@ -31,7 +31,7 @@ enum Command
     DISTRIBUTION,
     DISPLAY,
     HIDE,
-    PACKS,
+    DECKS,
     SHUFFLE,
     HELP,
     INVALID,
@@ -48,7 +48,10 @@ static unsigned display_table = CARDS_IN_SHOE|PROB_DEALER_LAST_HAND|EXP_INSURANC
 
 static void print_version(void)
 {
-    printf("*** bbjd: Beat the Blackjack dealer (by Jacob Rief - version 1.01) ***\n");
+    printf("*** bbjd: Beat the Blackjack dealer (version 1.0.3) ***\n");
+    printf("Copyright (C) 2000, Jacob Rief\n");
+    printf("bbjd comes with ABSOLUTELY NO WARRANTY\n");
+    printf("This is free software, and you are welcome to redistribute it\n");
 }
 
 
@@ -74,7 +77,7 @@ static void print_help(void)
        "\tnine, 9, ten, jack, queen, king, 0, t or 10.\n"
        "show:\t\tshow card distribution in shoe.\n"
        "run:\t\trecalculate probabilities and expectation with this card distribution.\n"
-       "packs [value]:\tsetup a new shoe with value*52 cards.\n"
+       "decks [value]:\tsetup a new shoe with value*52 cards.\n"
        "reset, shuffle:\treset the shoe, set 52 cards for each pack.\n"
        "version:\tprint information about this program.\n"
        "quit, exit:\tleave bbjd.\n");
@@ -99,25 +102,21 @@ static char* parse_card(FILE* in, enum Command com, char* remain)
     /* start parsing for second argument */
     card_value = com;
     parsed = sscanf(remain, "%[=]%d", arg1, &delta);
-    if (parsed>=1)
-    {
-        if (parsed>=2)
-        {
+    if (parsed>=1) {
+        if (parsed>=2) {
             if (set_cards_in_shoe(card_value, delta)<0)
                 printf("Value out of range.\n");
             sprintf(arg2, "%d", delta);
             remain = strstr(remain, arg2)+strlen(arg2);
             return remain;
         }
-        else
-        {
+        else {
             printf("Assigned value not a number\n");
             return NULL;
         }
     }
     parsed = sscanf(remain, "%[+]", arg1);
-    if (parsed>=1)
-    {
+    if (parsed>=1) {
         for (delta = 0; arg1[delta]=='+'; delta++)
             ;
         insert_to_shoe(card_value, delta);
@@ -125,8 +124,7 @@ static char* parse_card(FILE* in, enum Command com, char* remain)
         return remain;
     }
     parsed = sscanf(remain, "%[-]", arg1);
-    if (parsed>=1)
-    {
+    if (parsed>=1) {
         for (delta = 0; arg1[delta]=='-'; delta++)
             ;
         remove_from_shoe(card_value, delta);
@@ -151,8 +149,7 @@ static char* parse_display(FILE* in, enum Command com, char* remain)
     if (skip_spaces(&remain)[0]=='\0')
         return NULL;
     parsed = sscanf(remain, "%s", arg1);
-    if (parsed>=1)
-    {
+    if (parsed>=1) {
         if (strcmp(arg1, "all")==0)
             dspyhide = CARDS_IN_SHOE|PROB_DEALER_LAST_HAND|EXP_INSURANCE|EXP_BUY_STAY
                 |EXP_DOUBLE_BUY|EXP_SPLIT_JOINED_DEF|EXP_SPLIT_JOINED_PAR
@@ -177,23 +174,20 @@ static char* parse_display(FILE* in, enum Command com, char* remain)
             dspyhide |= EXP_PLAYER_LAST_HAND, valid = 1;
         if (strcmp(arg1, "none")==0)
             dspyhide = 0, valid = 1;
-        if (valid)
-        {
+        if (valid) {
             if (com==DISPLAY)
                 display_table |= dspyhide;
             else
                 display_table &= ~dspyhide;
             remain = strstr(remain, arg1)+strlen(arg1);
         }
-        else
-        {
+        else {
             printf("'display'/'hide' must be followed by one on the arguments:\n"
                  "    all, final, cards, dealer, buy, insurance, double, partner, player or none\n");
             remain = NULL;
         }
     }
-    else
-    {
+    else {
         printf("'hide' must be followed by an argument\n");
         remain = NULL;
     }
@@ -201,30 +195,26 @@ static char* parse_display(FILE* in, enum Command com, char* remain)
 }
 
 
-static char* parse_packs(FILE* in, enum Command com, char* remain)
+static char* parse_decks(FILE* in, enum Command com, char* remain)
 {
-    int parsed, packs;
+    int parsed, decks;
     char arg1[32];
     if (skip_spaces(&remain)[0]=='\0')
         return NULL;
-    parsed = sscanf(remain, "%d", &packs);
-    if (parsed>=1)
-    {
-        if (packs>0)
-        {
-            init_shoe(packs);
-            sprintf(arg1, "%d", packs);
+    parsed = sscanf(remain, "%d", &decks);
+    if (parsed>=1) {
+        if (decks>0) {
+            init_shoe(decks);
+            sprintf(arg1, "%d", decks);
             remain = strstr(remain, arg1)+strlen(arg1);
         }
-        else
-        {
-            printf("'packs' must be a positive number\n");
+        else {
+            printf("'decks' must be a positive number\n");
             remain = NULL;
         }
     }
-    else
-    {
-        printf("'packs' must be followed by a numeric argument\n");
+    else {
+        printf("'decks' must be followed by a numeric argument\n");
         remain = NULL;
     }
     return remain;
@@ -237,25 +227,21 @@ static int next_command(FILE* in)
     enum Command com = CONT;
     char inputline[256], arg1[32], arg2[32];
     char* string = NULL;
-    while (1)
-    {
+    while (1) {
         arg1[0] = '\0'; arg2[0] = '\0';
-        if (string==NULL)
-        {
+        if (string==NULL) {
             printf("bbjd> ");
             if ((string = fgets(inputline, 256, in))==NULL)
                 continue;
         }
-        if (skip_spaces(&string)[0]=='\0')
-        {
+        if (skip_spaces(&string)[0]=='\0') {
             string = NULL;
             continue;
         }
 
         /* find the command */
         parsed = sscanf(string, "%d%s", &card_value, arg2);
-        if (parsed>=1)
-        {
+        if (parsed>=1) {
             /* arg1 seems to be a number */
             sprintf(arg1, "%d", card_value);
             if (card_value>=1 && card_value<=10)
@@ -265,12 +251,10 @@ static int next_command(FILE* in)
             else
                 com = INVALID;
         }
-        else
-        {
+        else {
             /* arg1 seems to be a string */
             parsed = sscanf(string, "%[^ +-=\n]%s", arg1, arg2);
-            if (parsed>=1)
-            {
+            if (parsed>=1) {
                 if (strcmp(arg1, "ace")==0 || strcmp(arg1, "a")==0)
                     com = ACE;
                 else if (strcmp(arg1, "two")==0)
@@ -299,8 +283,8 @@ static int next_command(FILE* in)
                     com = DISPLAY;
                 else if (strcmp(arg1, "hide")==0 || strcmp(arg1, "h")==0)
                     com = HIDE;
-                else if (strcmp(arg1, "packs")==0)
-                    com = PACKS;
+                else if (strcmp(arg1, "decks")==0)
+                    com = DECKS;
                 else if (strcmp(arg1, "shuffle")==0 || strcmp(arg1, "/")==0 || strcmp(arg1, "reset")==0)
                     com = SHUFFLE;
                 else if (strcmp(arg1, "run")==0 || strcmp(arg1, "r")==0)
@@ -316,8 +300,7 @@ static int next_command(FILE* in)
                     com = INVALID;
             }
         }
-        switch (com)
-        {
+        switch (com) {
         case ACE: case TWO: case THREE: case FOUR: case FIVE:
         case SIX: case SEVEN: case EIGHT: case NINE: case TEN:
             if (parsed==0)
@@ -346,11 +329,11 @@ static int next_command(FILE* in)
         case CALC:
             return CALC;
                   
-        case PACKS:
+        case DECKS:
             if (parsed==0)
                 return CALC;
             string = strstr(string, arg1)+strlen(arg1);
-            string = parse_packs(in, com, string);
+            string = parse_decks(in, com, string);
             break;
 
         case SHUFFLE:
@@ -396,10 +379,8 @@ int main(int argc, char** argv)
     int run = CALC;
     print_version();
     init_shoe(6);
-    while (run!=QUIT)
-    {
-        switch (run)
-        {
+    while (run!=QUIT) {
+        switch (run) {
         case CALC:
             calc_distribution();
             printf("============================================"
@@ -441,5 +422,3 @@ int main(int argc, char** argv)
     }
     return 0;
 }
-
-
