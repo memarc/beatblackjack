@@ -1,0 +1,34 @@
+bbjd - Beat the blackjack dealer
+Main code written by Jacob Rief in 1992.
+Adopted for public and published in 1998.
+
+Purpose:
+This program is not a game. If You expected a game I am sorry, You may find
+something adequate for sure.
+This is a tool to calculate the optimum strategy playing Black Jack.
+This program may be used to prove that playing Black Jack, it is possible to beat
+the casino. As far as I know, Black Jack is the only game offered by casinos, where
+it is mathematically proven, that it is possible to win on the long term.
+It was written in 1992 during my studies of physics for a mathematical seminar
+about probability calculations.
+The program may be used to understand and to learn the strategies how to beat the dealer.
+THE AUTHOR DOES NOT TAKE ANY RESPONSIBILITY IF THE STRATEGY OR PROGRAM DOES NOT
+WORK AS DESCRIBED.
+
+Please also read the following files:
+Theory: Understand how the strategy beating the dealer works.
+Install: How to build the two executables.
+Interactive: How to use the interactive front end.
+Simulation: How to use the simulating tool.
+COPYING: GPL stuff.
+
+Please note, that both programs have no graphical user interface (a graphically user 
+interface would be too conspicuous anyway). Therefore the interface might look quite
+dump. The reason is to allow maximum portability with minimum system dependency.
+These programs should compile and run on practically every platform with a C-compiler,
+the <stdio.h> include file and a standard C-library.
+
+The author is a native German speaker, so don't be shocked if You find any spelling errors
+in this text. Instead I would appreciate if You would inform me and send them
+to bbjd@bigfoot.com.
+

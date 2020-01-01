@@ -1,0 +1,321 @@
+bbjd - Beat the blackjack dealer
+Written by Jacob Rief in 1992.
+Adopted for public and published in 1998.
+
+How can You beat the Black Jack dealer and why do casinos still offer Black Jack if
+this is so? To understand and to prove this, I have written this program. You may use
+it to experiment, to test Your own strategy or to build it into a pocket sized gamble-computer.
+
+In order to win on the long term, You have to count cards. And You have to recalculate
+the probabilities and expectations according to the cards remaining in the shoe.
+More than that, in casinos You are allowed to use calculators and even laptops playing
+roulette. But when You play Black Jack, You are not even allowed to write on paper or
+to use an abacus. They know why!
+
+All probability and expectation tables shown here have been calculated for 6 decks of
+52 cards. You may use the program 'bbjd' supplied with this package to obtain the same
+tables. You may also use 'bbjd' to test with a different amount of packs or other distributions
+of cards in the shoe.
+
+How does the strategy work? In order to understand this, You must know something about the
+rules of Black Jack.
+Black Jack is played with 4 to 6 decks of 52 cards each. The values of the cards correspond
+to their numerical value from 2-10. All face cards (jack, queen, king) count 10 and
+the ace either 1 or 11, as the holders desires. The color of the cards does not have any
+effect.
+The goal of the game is to reach a score (= sum of the cards) as high as possible but
+not more than 21. A Black Jack (ace and a card whose value is 10) beats all other 
+combination of cards.
+If the final sum is higher than the sum of the dealer, the player gets a play-off of 1:1
+of his initial stake.
+If the players combination is Black Jack, the play-off is 3:2 of the initial stake.
+If the sum of the dealer is lower, the player looses his bet. If the sum is equal,
+the nobody wins. If the player holds a score of 22 or more, he busted and thus he looses
+his bet immediately. If the dealer busts, the players wins independently of his
+final score.
+Black Jack can be played from one to seven players against one dealer. The dealer shuffles
+the cards. Now You and the other players must place their bets. Then each player and the
+dealer receives one card. The cards all lie face up. Thereafter the player receive a second
+card. The player now can continue to 'buy' further cards, one by one, until he believes that 
+he is near enough to 21. If the player believes to have reached a score high enough he must
+signalise the dealer to 'stay', which means not to call for any further cards.
+The player has some more possibility's other than 'buy' and 'stay'. If he reached a score
+of nine, ten or eleven with his first two cards, he can double his bet. However if he does so,
+he will be dealt only one more card.
+If the first two cards are of same value, the player has the possibility to 'split hand'
+which means that each of the cards are used to start with a separate bet. For each split hand,
+an additional bet equal to the first is required.
+There is one exception: If the player splits two aces, he receives only one more card.
+In this case a score of 21 is not considered as Black Jack.
+Once the last player has decided to stay with his score, the dealer starts to draw a second
+card. If his result is reaching a score of 17 or more, he will deal himself no further cards.
+If the dealer has a score of 16 or less, he must draw until he has reached 17 or more. If
+the dealer exceeds 21, he busts. This is the basic knowledge You have: The dealer can not split
+nor double; he must play according to strict rules. And thats our advantage!
+
+The first thing to do, is to calculate the probabilities of the dealers last hand. To do this
+we assume that the shoe is a black box, whose job is to deliver the probability for drawing a
+card with a certain value. Lets say the we have 6 decks of 52 cards, so the probability
+of drawing an ace is 6*4/6*52 = 24/312 = 7.7%. The probability of drawing a second ace without
+reshuffle is 23/311 = 7.4% and so on. As the game goes on without reshuffle, the probabilities
+to draw certain cards will raise or decline, depending on which cards have gone during the
+past.
+We can see the first card the dealer has drawn before we start to play. This is called the 'dealers
+first hand' marked as 'dfh'. It is of great interest to calculate the probability of the 'dealers
+last hand' or 'dlh'. Assuming he has shuffled 6 desks (312 cards), then the probability of the 
+dealers last hand is shown in the following table:
+
+--- Probability of dealers last hand under the condition of dealers first hand ---
+dfh        2       3       4       5       6       7       8       9      10       A    TOTAL
+p(dfh)    7.7     7.7     7.7     7.7     7.7     7.7     7.7     7.7    30.8     7.7   100.0
+p(BUST)  35.4    37.4    39.6    41.8    42.3    26.2    24.4    22.9    21.2    11.5    28.2
+p(BJ)     0.0     0.0     0.0     0.0     0.0     0.0     0.0     0.0     7.7    30.9     4.7
+p(21)    11.8    11.5    11.2    10.8     9.7     7.4     6.9     6.1     3.5     5.4     7.3
+p(20)    12.4    12.1    11.6    11.2    10.2     7.9     6.9    12.0    34.0    13.1    18.0
+p(19)    13.0    12.5    12.1    11.8    10.6     7.8    12.9    35.2    11.2    13.1    13.4
+p(18)    13.4    13.1    12.4    12.2    10.6    13.8    36.0    11.7    11.2    13.1    13.9
+p(17)    14.0    13.4    13.1    12.2    16.6    36.9    12.9    12.0    11.2    13.0    14.5
+
+The probability the dealer will bust is 28.2%, the probability the dealer stops
+with a score of 20 is 18.0% and so on (look at the column named TOTAL).
+But we know more. If the first hand of the dealer is a 6, the probability he busts is
+much higher (42.3%) and the probability he stops with 20 is lower (10.2%) compared to the
+average. During the game we can see the dealers first hand before we have to do our decisions.
+So we will buy carefully when the dealers first hand is 2-6, and we will buy more courageous
+when the dealers first hand is 7-ACE.
+
+The table above is valid for the dealers last hand. Calculating the probabilities for the players
+last hand is not as simple, as the player has lots of decisions to make. The player must decide to
+buy or to stay with a present score between 12 and 16. Below 12 the player will always buy, because
+he can never bust. With a score of 17 and more the player will never buy, because the risk to bust
+is to high. With soft hands (ie. an ace and another card) the player will always buy, if the score
+is 6/16 or lower because he can't bust and such a score always looses against the dealers score.
+
+To know if the right decision is to buy or to stay in a situation where the present score is between
+12 and 16, lets calculate the probabilities for the next score, if the player would buy another card.
+Assume the players score is 16, the probability to bust buying a card is 61.5%, the probability to
+reach 21, 20, 19, 18 or 17 is 7.7% respectively. 
+With this knowledge we can do a comparison of probabilities to calculate the expectation to buy
+and to stay. We have to compare each possible players last hand against each possible dealers last
+hand.
+
+For this realistic example, have a look at the following tables:
+Assume the dealers first hand is 7, the players present score is 16 and the player buys a card.
+
+final
+score   player  dealer  player wins in % of the possible cases
+BUST    61.5%   26.2%   0.0%
+ 21      7.7%    7.4%   0.077*(0.369+0.138+0.078+0.079+0.262) = 7.1%
+ 20      7.7%    7.9%   0.077*(0.369+0.138+0.078+0.262) = 6.5%
+ 19      7.7%    7.8%   0.077*(0.369+0.138+0.262) = 5.9%
+ 18      7.7%   13.8%   0.077*(0.369+0.262) = 4.9%
+ 17      7.7%   36.9%   0.077*0.262 = 2.0%
+
+final
+score   player  dealer  player looses in % of the possible cases
+BUST    61.5%   26.2%   61.5%
+ 21      7.7%    7.4%   0.0%
+ 20      7.7%    7.9%   0.077*0.074 = 0.6%
+ 19      7.7%    7.8%   0.077*(0.074+0.079) = 1.2%
+ 18      7.7%   13.8%   0.077*(0.074+0.079+0.078) = 1.8%
+ 17      7.7%   36.9%   0.077*(0.074+0.079+0.078+0.138) = 2.8%
+
+If the player buys a card, the probability he wins is 26.4%, the probability
+he looses is 67.9% and the probability for a standoff is 5.7%. This means that
+the expectation for buy is 26.4%-67.9% = -41.5%. Spoken differently: In 100 games 
+(stake is 1 dollar each) where the situation occurs (dealers first hand is 7,
+players score is 16 and the player buys a card) the player will loose about 41.5 dollars in
+sum (all 100 games).
+On the other side, if the player stays, the probability he wins is 26.2%, the probability
+he looses is 7.4%+7.9%+7.8%+13.8%+36.9% = 73.8%, a standoff is impossible. It is easier to
+calculate 100%-26.2% = 73.8%. This gives an expectation for 'stay' of 26.2%-73.8% = -47.6%.
+Spoken differently: In 100 games where the situation occurs (dealers first hand is 7,
+players score is 16 and the player stays) the player will loose about 47.6 dollars in sum.
+What does this mean? If the dealers first hand is 7 and the player has a score of 16, on the
+long term the player will loose 41.5% of his stake if he buys a card and he will loose 47.6%
+of his stake, if he stays. This means that in this special circumstance the player will be
+-41.5%-(-46.6%) = 6.1% better off, if he buys a cards instead of staying. This situation 
+is always a bad deal for the player, however even for bad deals the best decision should
+be taken.
+Whenever a decisions has to be done whether to buy or to stay, a calculation for the probabilities
+and expectations for each possibility has been made. The results are shown in the following table.
+
+--- Expectation for BUY contra STAY under the condition of dealers first hand ---
+dfh        2       3       4       5       6       7       8       9      10       A
+E(8/18)  -5.9    -5.8    -5.8    -5.3    -9.4   -23.0    -6.8     8.1     3.0     0.4
+E(7/17)  15.2    14.5    13.8    13.5    11.5    15.9    30.8    26.4    20.2    20.5
+E(16)   -17.9   -21.3   -24.8   -28.6   -27.7     6.1     5.4     3.2     0.0    10.3
+E(15)   -12.6   -15.7   -18.9   -22.3   -21.3    10.5     9.4     6.8     3.2    12.7
+E(14)    -7.1    -9.8   -12.7   -15.8   -14.8    15.3    13.9    11.0     6.7    15.5
+E(13)    -1.6    -4.0    -6.6    -9.3    -8.2    20.7    18.8    15.4    10.6    18.6
+E(12)     3.9     1.8    -0.5    -2.8    -1.7    26.3    24.0    20.1    14.7    21.8
+
+You must read this for the following examples like:
+If the dealers first hand is 10 than on the long term the player will win 20.1% more
+if he buys with a score of 12 than if he stays. So he should buy.
+If the dealers first hand is 3 than on the long term the player will win 15.7% more
+if he stays with a score of 15 than if he buys. So he should stay.
+
+The rules of Black Jack are a little bit more complicate than that. We must calculate the
+expectations for doubling cards too. The table is represented here:
+
+--- Expectation for DOUBLE contra BUY under the condition of dealers first hand ---
+dfh        2       3       4       5       6       7       8       9      10       A
+E(11)    23.3    25.9    28.6    31.1    33.5    17.2    12.1     7.3    -1.8   -33.0
+E(10)    17.8    20.6    23.4    26.1    29.0    13.9     9.1     3.3   -10.4   -37.1
+E( 9)    -1.2     2.2     5.6     9.1    12.3    -6.4   -12.3   -24.4   -36.2   -55.9
+
+You must read this for the following examples like:
+If the dealers first hand is 9 than on the long term the player will win 7.3% more
+if he doubles with a score of 11 than if he stays. So he should double!
+If the dealers first hand is 8 than on the long term the player will win 12.3% more
+if he buys with a score of 9 than if he doubles. So he should buy the next card, and than
+continue with the strategy described above!
+
+And here we have the expectations for splitting two cards with the same value:
+
+--- Expectation for SPLIT contra BUY/STAY for splitting player (default rule) ---
+dfh        2       3       4       5       6       7       8       9      10       A
+E(A-A)   39.5    42.0    44.7    46.6    48.8    30.6    26.2    23.8    16.1   -21.2
+E(2-2)   -3.5    -1.5     0.8     4.4     6.7     3.4    -4.7   -13.9   -25.5   -41.4
+E(3-3)   -5.9    -2.9     0.5     4.1     6.4     4.2    -4.0   -13.4   -25.1   -41.1
+E(4-4)  -21.1   -17.5   -13.7    -9.4    -9.6   -26.6   -26.4   -27.4   -38.3   -52.5
+E(5-5)  -44.5   -40.2   -35.5   -30.5   -29.6   -51.0   -58.9   -66.5   -69.1   -76.0
+E(6-6)   -2.3     2.6     7.1    10.5    13.1    -8.4   -15.8   -24.3   -34.5   -48.4
+E(7-7)    7.7    10.1    13.0    15.9    21.5    19.3    -4.2   -13.0   -22.6   -42.7
+E(8-8)   25.1    27.0    29.3    31.5    38.7    58.2    33.9     8.9    -3.7   -22.4
+E(9-9)    2.5     5.3     8.2    11.9    10.7    -5.8     9.1     8.0   -19.4   -33.0
+E(10-K) -28.0   -24.3   -20.3   -15.9   -13.4   -26.3   -40.1   -53.1   -54.5   -65.3
+
+You must read this for the following examples like:
+If the dealers first hand is 8 than on the long term the player will win 33.9% more
+if he splits with a pair of 8 rather than if he buys normally. So he should split the
+pair, and continue for each bet with the strategy as described above.
+If the dealers first hand is 9 than on the long term the player will win 13.0% more
+if he does not split with a pair of nine than if he splits. So he should not split and
+continue with the strategy described above!
+
+But there is more You can do with splitting. One of the disadvantages when You split,
+is that You have to do another bet of the same amount as the initial bet. Sometimes
+splitting certain combinations would increase the probability of achieving a higher
+final score, but the total amount of money must be doubled too. So sometimes is not
+worthwhile to split.
+
+However, there is one possibility to split cards, but halve the bet. Remember, only the
+placeholder has to place another bet of the same hight. Other players, sitting on different
+boxes or behind the placeholder are free to do so. They may halve their bet on the
+placeholder box. This rule may be used to take even more advantage, when two or more players
+attempt to beat the dealer. In situations where the total expectation (see later in this
+text) raises, only the partner increases the bet, the placeholder continues to place minium.
+Lets say the minimum bet on the table is 1 and the maximum bet is 100.
+In good times (when the total expectation is above 0) only the partner
+will bet for 100, the placeholder will stay on 1. In this situation the expectations
+for splitting cards of same value looks quite different, because the stake must not be doubled.
+
+--- Expectation for SPLIT contra BUY/STAY for splitting partner (half bet) ---
+dfh        2       3       4       5       6       7       8       9      10       A
+E(A-A)   15.6    15.8    15.9    15.3    15.1     7.0     8.3    11.9    15.1     5.5
+E(2-2)    4.0     3.4     2.7     2.6     2.8     6.1     5.6     5.1     4.4     3.4
+E(3-3)    4.2     4.0     3.8     3.6     3.9     9.9     9.1     8.1     7.0     5.5
+E(4-4)   -9.5    -9.3    -9.0    -8.5   -10.6   -17.5   -10.2    -3.2    -3.9    -4.0
+E(5-5)  -31.5   -30.5   -29.5   -28.3   -29.3   -38.4   -39.4   -39.1   -31.9   -25.4
+E(6-6)   11.7    13.1    14.0    13.4    14.3     6.7     5.9     5.0     4.3     3.5
+E(7-7)   18.5    17.6    16.9    16.1    18.5    26.1    16.9    15.5    14.5     9.6
+E(8-8)   27.2    26.1    25.1    23.9    27.1    49.6    39.7    29.7    26.8    22.0
+E(9-9)   -4.8    -4.8    -4.7    -4.2    -8.8   -22.9    -0.7    13.2     2.3     2.4
+E(10-K) -46.0   -44.6   -43.1   -41.6   -41.9   -51.8   -59.7   -64.4   -49.1   -39.9
+
+This means that if You try to beat the dealer as a pair, and You do play with high
+bets on the box of Your partner, You should split even in cases where You normally
+would not. For instance here we split pairs of 2-2 and pairs of 3-3 against
+2, 3, 8, 9, 10 and ace.
+
+If You wonder why the half bet strategy says not to split 9-9 against the dealers 2, 3,
+4, 5 or 6, whereas the default rule strategy says to split them, the reason is as follows:
+A pair of 9 has a score of 18, which is quit good. Splitting the pair would divide the
+score into two cards whose final score is uncertain. However a dealer first hand of 2,
+3, 4, 5 and 6 means that the probability the dealers busts is quite hight, from 35.4% to
+42.3%. This means that the player, after having seen the dealers bad first had, gets a
+second opportunity to increase his stake. Using this opportunity gives him a further advantage.
+
+Another decision the player can do, is to take out insurance against a Black Jack,
+if the dealers first hand is an ace. This is very rarely of interest and should normally
+not be considered as the default strategy informs:
+
+--- Expectation for INSURANCE under the condition of dealers first hand is ACE ---
+E(INSURE|ACE)                                                                    -7.4
+
+The player in comparison to the dealer must decide many times what to do.
+He must decide to buy or to stay, to double or buy, to split or not.
+Therefore the probability calculations of the players last hand are not as
+simple as the calculations for the dealers last hand. But if the players
+does his decisions according to the strategy described above, the probability
+he will finish with one of the following scores is:
+
+--- Probability of players last hand (when played with optimal strategy) ---
+dfh        2       3       4       5       6       7       8       9      10       A    TOTAL
+p(BUST)   3.3     3.1     0.0     0.0     0.0    26.1    26.5    26.9    28.8    29.0    17.7
+p(BJ)     4.7     4.7     4.7     4.7     4.7     4.7     4.7     4.7     4.7     4.7     4.7
+p(21)     3.8     3.7     2.9     2.9     2.9     7.3     7.3     7.5     7.8     7.7     5.9
+p(20)    14.4    14.3    13.5    13.5    13.5    17.8    17.9    18.1    18.3    18.4    16.5
+p(19)     9.9     9.9     9.1     9.1     9.1    13.3    13.4    13.6    13.7    13.8    12.0
+p(18)     9.9     9.9     9.1     9.1     9.1    14.0    13.4    12.2    12.9    12.9    11.6
+p(17)     9.8     9.7     9.0     9.0     9.0    13.2    13.1    13.3    13.5    13.6    11.8
+p(16)     9.7     9.8     8.9     8.9     8.9     0.7     0.7     0.7     0.0     0.0     3.7
+p(15)    10.9    10.9    10.1    10.1    10.1     0.7     0.7     0.7     0.0     0.0     4.2
+p(14)    10.9    10.8     9.9     9.9     9.9     0.7     0.7     0.7     0.0     0.0     4.1
+p(13)    12.0    12.0    11.3    11.3    11.3     0.7     0.7     0.7     0.0     0.0     4.6
+p(12)     0.7     1.0    11.1    11.1    11.1     0.7     0.7     0.7     0.0     0.0     2.9
+p(11)     0.0     0.3     0.3     0.3     0.3     0.0     0.0     0.0     0.0     0.0     0.1
+        -----------------------------------------------------------------------------
+expect:   8.9    12.0    15.5    19.2    22.3    14.2     5.7    -4.1   -17.7   -34.0
+
+Why should the player ever have a final score of 11? We know that it is always safe to buy another
+card with a score of 11. Well, look at the double/buy table and You will see that in some
+circumstances You should double on 9 against 3, 4, 5 or 6. But in a very few unlucky cases You
+just get a card with a value of 2 after You doubled. Fortunately this does not happen very often,
+only about each 1000 games.
+
+The last table shows the total expectation playing Black Jack.
+
+--- Final expectation (when played with optimal strategy) ---
+dfh        2       3       4       5       6       7       8       9      10       A    TOTAL
+expect:   8.9    12.0    15.5    19.2    22.3    14.2     5.7    -4.1   -17.7   -34.0   -0.849%
+
+One interesting part is that the player wins on the long term against the dealers
+first hand 2, 3, 4, 5, 6, 7 and 8. The dealer only wins on the long term with 
+9, 10 and specially with the ace. As the player must place his bets before he knows what
+the dealers first hand is, this table is not of to great interest.
+Except for the last number, the total expectation, this is of very high interest.
+This number is the magic key which gives a realistic chance to beat the casino.
+On the long term the player looses "only" 0.85% of his initial bet, if the cards would
+be shuffled after each game or if the dealer plays with an infinite number of packs.
+On real Black Jack tables, the dealer plays with one to six packs, shuffled
+after half to three quarts of the total amount of cards. At the beginning of the first game,
+after the shoe is filled up with 6 packs of freshly shuffled cards, the total expectation
+is -0.849%. As long as the dealer does not reshuffle, the total expectation moves up until
+about 5% and down until about -6%. If high cards are gone (9, 10, ace), the total expectation
+decreases, but if the low cards (8, 7, 6, 5, 4, 3, 2) are gone the total expectation increases.
+When the total expectation is above 0% the player wins on the long term, thus he should
+place high bets!
+Card constellations where lots of low valued cards are gone, lots of high valued cards are
+still in the shoe, let raise the total expectation above 0%. This happens about every
+20st game, which is not very often. What the player has to do, is to play dozens
+of games with the minimum bet and then surprisingly raising the bet for a few games
+when the total expectation is high.
+
+A good strategy is to always place a minimum stake, if the total expectation is below 0%.
+With the knowledge, which cards are gone, the total expectation sometimes increases above
+0. Now high bets are required. Now the stake should be increased proportionally with the
+expectation, so that the stake reaches the table limit when the total expectation above 4%.
+Another more risky and less recommended strategy would be to play with the minimum
+table limit with expectations below 0% and with maximum table limit with an expectation
+above 0%. The latter strategy gives better theoretical results, however the risk of loosing
+all your money is much higher. Furthermore the casino may identify You as a "card counter".
+
+Two programs are supplied, one is to calculate the strategy, probabilities and
+expectations according to the cards which are gone. It can be used interactively,
+to experiment and practise Your strategy. The user can modify the composition of
+cards in the shoe and then recalculate all the probabilities and expectations.
+The second program requires no user input by the user. It simulates games between the
+dealer and the player.

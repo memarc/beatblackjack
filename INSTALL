@@ -1,0 +1,13 @@
+bbjd - Beat the blackjack dealer
+How to build and install:
+uncompress and compile the package with
+> zcat | tar xv
+> make
+this works with fine under linux with gcc.
+
+You may change compiler options for Your system in the Makefile.
+The only requirements to build this software is an ANSI-C-compiler,
+stdio.h and a standard libc library.
+
+For any questions, bug-reports, suggestions and so on,
+write to bbjd@bigfoot.com
