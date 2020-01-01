@@ -13,7 +13,7 @@ COPTS = -O2 -fPIC
 
 ######## compile options for pythonwrappers ########
 PYTHONWRAPPER=swig -python  
-PYTHONINC=/usr/include/python2.4
+PYTHONINC=$(shell python-config --include)
 
 ######## link options ########
 LD = gcc
@@ -22,19 +22,13 @@ LIBDIR =
 LIBRARIES = #-lm 
 LDFLAGS = $(LIBDIR)
 
-######## install options ########
-INSTALLBASE = /usr/local/bbjd
-INSTALLDIR = install -m 755 -d 
-INSTALLFILE = install -m 644
-INSTALLEXE = install -m 755
-
 ######## rules ########
 
-default: bbjd simbj basicbbjd basicsimbj pythonmodules
-
-pythonmodules: bbjd.py _bbjd.so simbj.py _simbj.so
+default: bbjd simbj basicbbjd basicsimbj
 
 all: default pythonmodules
+
+pythonmodules: bbjd.py _bbjd.so simbj.py _simbj.so
 
 bbjd: probability.o interactive.o display.o
 	@echo --- linking: $@ ---
@@ -70,7 +64,7 @@ basicsimbj.so: basicsimbj_wrap.o simulate.o basic_probability.o
 
 %_wrap.o: %_wrap.c
 	@echo --- compiling: $< ---
-	$(CC) -I$(PYTHONINC) $(COPTS) -c $< -o $@
+	$(CC) $(PYTHONINC) $(COPTS) -c $< -o $@
 
 %o: %c
 	@echo --- compiling: $< ---
